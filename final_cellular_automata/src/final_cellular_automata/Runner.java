@@ -5,16 +5,19 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class Runner {
-	public static int width = 10;
+	public static int width = 12;
 	public static int height = width;
 	public static Cell[][] cellGrid = new Cell[width][height];
 	public static double odds = 15; // odds out of 100 that a cell starts as alive
-	public static int totalStates = 1;
-	public static int gens = 100;
+	public static int totalStates = 3;
+	public static int gens = 5;
+	public static Cell dead = new Cell("dead");
 
 	public static void main(String[] args) {
 		//itialize();
-		testInital();
+		//testInital();
+		//testBiasInitialization();
+		testRockPaperScissors();
 		gridPrint();
 		for(int i = 0;i<gens;i++) {
 			oneGen();
@@ -22,11 +25,74 @@ public class Runner {
 		}
 	}
 
+	private static void testRockPaperScissors() {
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+					cellGrid[i][j] = dead;
+			}
+		}
+		cellGrid[1][1] = new Cell("alive");
+		cellGrid[1][1].state=0;
+		cellGrid[1][2] = new Cell("alive");
+		cellGrid[1][2].state=0;
+		cellGrid[1][3] = new Cell("alive");
+		cellGrid[1][3].state=0;
+		cellGrid[2][1] = new Cell("alive");
+		cellGrid[2][1].state=1;
+		cellGrid[2][2] = new Cell("alive");
+		cellGrid[2][2].state=1;
+		cellGrid[2][3] = new Cell("alive");
+		cellGrid[2][3].state=1;
+		
+		cellGrid[5][1] = new Cell("alive");
+		cellGrid[5][1].state=1;
+		cellGrid[5][2] = new Cell("alive");
+		cellGrid[5][2].state=1;
+		cellGrid[5][3] = new Cell("alive");
+		cellGrid[5][3].state=1;
+		cellGrid[6][1] = new Cell("alive");
+		cellGrid[6][1].state=2;
+		cellGrid[6][2] = new Cell("alive");
+		cellGrid[6][2].state=2;
+		cellGrid[6][3] = new Cell("alive");
+		cellGrid[6][3].state=2;
+		
+		cellGrid[9][1] = new Cell("alive");
+		cellGrid[9][1].state=2;
+		cellGrid[9][2] = new Cell("alive");
+		cellGrid[9][2].state=2;
+		cellGrid[9][3] = new Cell("alive");
+		cellGrid[9][3].state=2;
+		cellGrid[10][1] = new Cell("alive");
+		cellGrid[10][1].state=0;
+		cellGrid[10][2] = new Cell("alive");
+		cellGrid[10][2].state=0;
+		cellGrid[10][3] = new Cell("alive");
+		cellGrid[10][3].state=0;
+		//cellGrid[2][3] = new Cell("alive");
+		
+	}
+
+	private static void testBiasInitialization() {
+		Random rnd =new Random();
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				if (rnd.nextInt(100) < odds) {
+					cellGrid[i][j] = new Cell("alive");
+					cellGrid[i][j].state=((height-i+1)*totalStates)/height;
+				} else {
+					cellGrid[i][j] = dead;
+				}
+			}
+		}
+		
+	}
+
 	private static void testInital() {
 		
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-					cellGrid[i][j] = new Cell("dead");
+					cellGrid[i][j] = dead;
 			}
 		}
 		cellGrid[1][1] = new Cell("alive");
@@ -55,10 +121,7 @@ public class Runner {
 		Cell[][] temp = new Cell[width][height];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				temp[i][j] = new Cell("Dead");
-				if(i==0&&j==2) {
-					System.out.println("here");
-				}
+				temp[i][j] = dead;
 				if (cellGrid[i][j].state != -1) {
 					int currentState = cellGrid[i][j].state;
 					short tagNum = 0;
@@ -72,7 +135,7 @@ public class Runner {
 								int compareState = cellGrid[upAndDown][leftAndRight].state;
 								if (currentState == compareState && tagNum >= 0) {
 									tagNum = (short) (tagNum + (Math.pow(2, rotarty)));
-								} else if ((((compareState - currentState) + totalStates - 1) % totalStates) < (totalStates/2)) {
+								} else if ((((compareState - currentState) + totalStates - 1) % totalStates) < (totalStates/2)&& compareState!=-1) {
 									tagNum = -1;
 								}
 							}
@@ -99,7 +162,7 @@ public class Runner {
 						}
 					}
 					if (tournimentSet.size() == 0) {
-						temp[i][j] = new Cell("Dead");
+						temp[i][j] = dead;
 					} else {
 						temp[i][j] = runTourniment(tournimentSet,iCord,jCord);
 					}
@@ -113,7 +176,7 @@ public class Runner {
  		ArrayList<Cell> finalSet = checkReproduction(tournimentSet, iCord, jCord);
 		
 		if(finalSet.size()==0) {
-			return new Cell("dead");
+			return dead;
 		}else if(finalSet.size()==1) {
 			return finalSet.get(0);
 		}
@@ -200,7 +263,7 @@ public class Runner {
 				if (rnd.nextInt(100) < odds) {
 					cellGrid[i][j] = new Cell("alive");
 				} else {
-					cellGrid[i][j] = new Cell("dead");
+					cellGrid[i][j] = dead;
 				}
 			}
 		}
@@ -209,8 +272,8 @@ public class Runner {
 }
 
 // TODO:
-// create multi species cellular automata
-// create different rule sets
+// DONE create multi species cellular automata
+// DONE create different rule sets
 // rock paper scissors
 // mutations
 // specialization

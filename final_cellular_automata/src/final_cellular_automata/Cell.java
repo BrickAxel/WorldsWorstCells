@@ -23,8 +23,16 @@ public class Cell {
 		state = removalSet.get(0).state;
 
 		for (Cell parent : removalSet) {
-			comeToLifeStates.addAll(parent.comeToLifeStates);
-			stayAliveStates.addAll(parent.stayAliveStates);
+			for(Short littleGuy:parent.comeToLifeStates) {
+				if(!comeToLifeStates.contains(littleGuy)) {
+					comeToLifeStates.add(littleGuy);
+				}
+			}
+			for(Short littleGuy:parent.stayAliveStates) {
+				if(!stayAliveStates.contains(littleGuy)) {
+					stayAliveStates.add(littleGuy);
+				}
+			}
 		}
 	}
 
