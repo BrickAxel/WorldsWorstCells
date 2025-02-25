@@ -2,6 +2,7 @@ package final_cellular_automata;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Random;
 
 public class Cell {
 	public ArrayList<Short> comeToLifeStates = new ArrayList<>();
@@ -9,6 +10,8 @@ public class Cell {
 	public static int totalStates = Runner.totalStates;
 	public int state = -1;
 	public ArrayList<HashSet<Short>> surroundingStates = new ArrayList<>();
+	public static int mutateOdds = 1;
+	public static Random rnd = new Random();
 
 	public Cell(String type) {
 		if (type.equals("alive")) {
@@ -19,7 +22,6 @@ public class Cell {
 	}
 
 	public Cell(ArrayList<Cell> removalSet) {
-
 		state = removalSet.get(0).state;
 
 		for (Cell parent : removalSet) {
@@ -32,6 +34,20 @@ public class Cell {
 				if(!stayAliveStates.contains(littleGuy)) {
 					stayAliveStates.add(littleGuy);
 				}
+			}
+		}
+		if(rnd.nextInt(100)<mutateOdds) {
+			short newAddtion = (short) rnd.nextInt((int) Math.pow(2, 9));
+			if(!comeToLifeStates.contains(newAddtion)) {
+				comeToLifeStates.add(newAddtion);
+			}else {
+				comeToLifeStates.remove((Object) newAddtion);
+			}
+			if(!stayAliveStates.contains(newAddtion)) {
+				stayAliveStates.add(newAddtion);
+			}else {
+				comeToLifeStates.remove((Object) newAddtion);
+				//stayAliveStates.remove(newAddtion);
 			}
 		}
 	}
