@@ -10,12 +10,12 @@ public class Cell {
 	public static int totalStates = Runner.totalStates;
 	public int state = -1;
 	public ArrayList<HashSet<Short>> surroundingStates = new ArrayList<>();
-	public static int mutateOdds = 1;
-	public static Random rnd = new Random();
+	public static double mutateOdds = 1;
+	public static Random rnd = new Random(Runner.seed);
 
 	public Cell(String type) {
 		if (type.equals("alive")) {
-			state = (int) (System.nanoTime() % totalStates);
+			state = rnd.nextInt(totalStates);
 			setUpComingToLifeStates();
 			setUpStayAlive();
 		}
@@ -36,7 +36,7 @@ public class Cell {
 				}
 			}
 		}
-		if(rnd.nextInt(100)<mutateOdds) {
+		if(rnd.nextDouble(100)<mutateOdds) {
 			short newAddtion = (short) rnd.nextInt((int) Math.pow(2, 9));
 			if(!comeToLifeStates.contains(newAddtion)) {
 				comeToLifeStates.add(newAddtion);

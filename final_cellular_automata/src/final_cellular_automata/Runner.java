@@ -6,29 +6,39 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class Runner {
-	public static int width = 100;
+	public static int width = 300;
 	public static int height = width;
 	public static Cell[][] cellGrid = new Cell[width][height];
 	public static double odds = 15; // odds out of 100 that a cell starts as alive
 	public static int totalStates = 3;
-	public static int gens = 50000000;
+	public static int gens = 50000;
 	public static Cell dead = new Cell("dead");
+	public static int seed = 10;
 
 	public static void main(String[] args) throws InterruptedException {
+		Viewer seer = new Viewer();
+		seer.myComponent.scale=3;
+		seer.main(null);
 		// itialize();
 		// testInital();
 		testBiasInitialization();
 		// testRockPaperScissors();
-		gridPrint();
+		//gridPrint();
 		for (int i = 0; i < gens; i++) {
 				oneGen();
-			//if (i % 10 == 0) {
-				System.out.println(i);
-				gridPrint();
-				if (i < 1000) {
-					TimeUnit.MILLISECONDS.sleep(200);
+				
+				//System.out.println(i);
+				if(i%100==0) {
+					gridPrint();
 				}
-			//}
+				
+				Viewer.myComponent.newSquares(cellGrid);
+				seer.update();
+				 try {
+					TimeUnit.MILLISECONDS.sleep(20);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 
 		}
 	}
@@ -82,7 +92,7 @@ public class Runner {
 	}
 
 	private static void testBiasInitialization() {
-		Random rnd = new Random();
+		Random rnd = new Random(seed);
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				if (rnd.nextInt(100) < odds) {
@@ -112,21 +122,21 @@ public class Runner {
 	}
 
 	private static void gridPrint() {
-		int[] maxData = new int[totalStates + 1];
-		int[] popCount = new int[totalStates + 1];
+		int[] maxData = new int[totalStates];
+		int[] popCount = new int[totalStates];
 		for (int a = 0; a < height; a++) {
 			for (int b = 0; b < width; b++) {
 				if (cellGrid[b][a].state >= 0) {
-					System.out.print(cellGrid[b][a].state);
+					//System.out.print(cellGrid[b][a].state);
 					if (maxData[cellGrid[b][a].state] < cellGrid[b][a].comeToLifeStates.size()) {
 						maxData[cellGrid[b][a].state] = cellGrid[b][a].comeToLifeStates.size();
 					}
 					popCount[cellGrid[b][a].state]++;
 				} else {
-					System.out.print(" ");
+					//System.out.print(" ");
 				}
 			}
-			System.out.println();
+			//System.out.println();
 		}
 		for (int i = 0; i < maxData.length; i++) {
 			System.out.println(i + ": max :" + maxData[i] + ": total :" + popCount[i]);
@@ -279,7 +289,7 @@ public class Runner {
 	}
 
 	private static void itialize() {
-		Random rnd = new Random();
+		Random rnd = new Random(seed);
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				if (rnd.nextInt(100) < odds) {
