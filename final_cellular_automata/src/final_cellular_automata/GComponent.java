@@ -32,7 +32,11 @@ public class GComponent extends JPanel {
 		for (int i = 0; i < theBois.length; i++) {
 			for (int k = 0; k < theBois[0].length; k++) {
 				if (theBois[i][k].state >-1) {
-					dotDotDot.add(new Squares(k, i, scale, new Color((50*theBois[i][k].state+30)%255,(90*theBois[i][k].state+200)%255,(20*theBois[i][k].state+50)%255)));
+					if(theBois[i][k].comeToLifeStates.size()==0) {
+						dotDotDot.add(new Squares(k, i, scale, new Color((50*theBois[i][k].state+45)%255,(45*theBois[i][k].state+220)%255,(15*theBois[i][k].state+60)%255)));
+					} else {
+						dotDotDot.add(new Squares(k, i, scale, new Color((50*theBois[i][k].state+30)%255,(90*theBois[i][k].state+200)%255,(20*theBois[i][k].state+50)%255)));
+					}
 				}
 			}
 		}

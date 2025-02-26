@@ -9,19 +9,19 @@ public class Runner {
 	public static int width = 100;
 	public static int height = width;
 	public static Cell[][] cellGrid = new Cell[width][height];
-	public static double odds = 15; // odds out of 100 that a cell starts as alive
-	public static int totalStates = 1;
+	public static double odds = 50; // odds out of 100 that a cell starts as alive
+	public static int totalStates = 3;
 	public static int gens = 50000;
 	public static Cell dead = new Cell("dead");
-	public static int seed = 14;
+	public static int seed = 17;
 
 	public static void main(String[] args) throws InterruptedException {
 		Viewer seer = new Viewer();
-		seer.myComponent.scale=5;
+		seer.myComponent.scale=6;
 		seer.main(null);
-		// itialize();
+		 itialize();
 		// testInital();
-		testBiasInitialization();
+		//testBiasInitialization();
 		// testRockPaperScissors();
 		//gridPrint();
 		for (int i = 0; i < gens; i++) {
