@@ -6,18 +6,18 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class Runner {
-	public static int width = 300;
+	public static int width = 100;
 	public static int height = width;
 	public static Cell[][] cellGrid = new Cell[width][height];
 	public static double odds = 15; // odds out of 100 that a cell starts as alive
-	public static int totalStates = 3;
+	public static int totalStates = 1;
 	public static int gens = 50000;
 	public static Cell dead = new Cell("dead");
-	public static int seed = 10;
+	public static int seed = 14;
 
 	public static void main(String[] args) throws InterruptedException {
 		Viewer seer = new Viewer();
-		seer.myComponent.scale=3;
+		seer.myComponent.scale=5;
 		seer.main(null);
 		// itialize();
 		// testInital();
@@ -28,8 +28,9 @@ public class Runner {
 				oneGen();
 				
 				//System.out.println(i);
-				if(i%100==0) {
+				if(i%50==49) {
 					gridPrint();
+					
 				}
 				
 				Viewer.myComponent.newSquares(cellGrid);
@@ -249,7 +250,10 @@ public class Runner {
 				lastSet.add(majorityWinners);
 			}
 		}
-		return new Cell(lastSet);
+		if(lastSet.size()!=0) {
+			return new Cell(lastSet);
+		}
+		return new Cell(finalSet);
 		// TODO . If multiple of the same set can,
 		// hybridize. If multiple of different sets could reproduce there, rock paper
 		// scissor logic applies. If that would

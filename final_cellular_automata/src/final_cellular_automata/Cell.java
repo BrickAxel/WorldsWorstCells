@@ -10,8 +10,10 @@ public class Cell {
 	public static int totalStates = Runner.totalStates;
 	public int state = -1;
 	public ArrayList<HashSet<Short>> surroundingStates = new ArrayList<>();
-	public static double mutateOdds = 1;
+	public static double mutateOdds = 0.0;
 	public static Random rnd = new Random(Runner.seed);
+	public static boolean muttCurb = false;
+	public static int maxLambda = 56;
 
 	public Cell(String type) {
 		if (type.equals("alive")) {
@@ -22,6 +24,9 @@ public class Cell {
 	}
 
 	public Cell(ArrayList<Cell> removalSet) {
+		if(removalSet.size()==0) {
+			System.out.println("killa man");
+		}
 		state = removalSet.get(0).state;
 
 		for (Cell parent : removalSet) {
@@ -36,6 +41,7 @@ public class Cell {
 				}
 			}
 		}
+		comeToLifeStates.add((short) 2);
 		if(rnd.nextDouble(100)<mutateOdds) {
 			short newAddtion = (short) rnd.nextInt((int) Math.pow(2, 9));
 			if(!comeToLifeStates.contains(newAddtion)) {
@@ -46,9 +52,13 @@ public class Cell {
 			if(!stayAliveStates.contains(newAddtion)) {
 				stayAliveStates.add(newAddtion);
 			}else {
-				comeToLifeStates.remove((Object) newAddtion);
+				stayAliveStates.remove((Object) newAddtion);
 				//stayAliveStates.remove(newAddtion);
 			}
+		}
+		while(comeToLifeStates.size()>maxLambda && muttCurb) {
+			comeToLifeStates.remove(rnd.nextInt(maxLambda));
+			stayAliveStates.remove(rnd.nextInt(stayAliveStates.size()));
 		}
 	}
 
